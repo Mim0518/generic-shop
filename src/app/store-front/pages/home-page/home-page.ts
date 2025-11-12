@@ -2,20 +2,25 @@ import {Component, inject} from '@angular/core';
 import {ProductCard} from '@products/components/product-card/product-card';
 import {ProductsService} from '@products/services/products.service';
 import {rxResource} from '@angular/core/rxjs-interop';
+import {Pagination} from '@shared/pagination/pagination';
+import {PaginationService} from '@shared/pagination/pagination.service';
 
 @Component({
   selector: 'app-home-page',
   imports: [
-    ProductCard
+    ProductCard,
+    Pagination
   ],
   templateUrl: './home-page.html',
 })
 export class HomePage {
-  private productsService = inject(ProductsService)
+  private productsService = inject(ProductsService);
+  protected paginationService = inject(PaginationService)
   productsResource = rxResource({
-    params: () => ({}),
+    params: () => ({page : this.paginationService.currentPage()}),
     stream: () => {
       return this.productsService.getProducts({
+        offset: (this.paginationService.currentPage() - 1) * 8,
         limit: 8,
       })
     }
