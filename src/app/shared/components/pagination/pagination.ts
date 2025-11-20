@@ -1,4 +1,4 @@
-import {Component, computed, input, linkedSignal, signal} from '@angular/core';
+import {Component, computed, input, linkedSignal} from '@angular/core';
 import {RouterLink} from '@angular/router';
 
 @Component({

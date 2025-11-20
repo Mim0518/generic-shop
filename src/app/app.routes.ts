@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
+import {NotAuthenticatedGuard} from '@auth/guards/notAuthenticated.guard';
 
 export const routes: Routes = [
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.routes')
-    //TODO: add guard
+    loadChildren: () => import('./auth/auth.routes'),
+    canMatch: [NotAuthenticatedGuard]
   },
   {
     path: '',

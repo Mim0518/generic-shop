@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Product, ProductsResponse} from '@products/interfaces/product.interface';
-import {delay, Observable, of, tap} from 'rxjs';
+import {Observable, of, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
 const baseUrl = environment.baseUrl
 
@@ -32,7 +32,7 @@ export class ProductsService {
       }
     })
       .pipe(
-        tap(resp => console.log(resp)),
+        // tap(resp => console.log(resp)),
         tap(resp => this.productsCache.set(key, resp))
       );
   }
