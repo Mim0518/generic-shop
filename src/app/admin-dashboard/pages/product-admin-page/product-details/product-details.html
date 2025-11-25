@@ -36,7 +36,8 @@
       <input
         type="number"
         placeholder="Inventario"
-        class="input input-bordered w-full"
+        class="inpu
+        t input-bordered w-full"
         formControlName="stock"
         [class.border-red-500]="productForm.get('stock')?.errors ?? false"
       />
@@ -62,8 +63,8 @@
       >Femenino</button>
       <button type="button"
               class="btn btn-sm"
-              [class.btn-error]="productForm.value.gender === 'kids'"
-              (click)="productForm.patchValue({gender:'kids'})"
+              [class.btn-error]="productForm.value.gender === 'kid'"
+              (click)="productForm.patchValue({gender:'kid'})"
       >Kids</button>
       <button type="button"
               class="btn btn-sm"
@@ -96,14 +97,16 @@
   <div class="flex flex-col gap-2">
     <div class="flex justify-end h-12">
       <button class="btn btn-secondary" type="submit">
-        <!-- <span class="loading loading-spinner loading-sm"></span> -->
-
         Guardar
       </button>
     </div>
-
     <product-carousel [images]="product().images" />
-
     <input type="file" class="file-input file-input-bordered w-full mt-4" />
   </div>
 </form>
+
+@if (wasSaved()) {
+  <div class="alert alert-success fixed bottom-4 right-4 w-80 animate-fadeIn">
+    <span>Datos actualizados correctamente</span>
+  </div>
+}

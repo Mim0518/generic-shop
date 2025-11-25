@@ -7,6 +7,11 @@
         <img [src]="image | productImage" alt="Product Image"
         class="w-full object-cover h-full rounded-lg"/>
       </div>
+    } @empty {
+    <div class="swiper-slide">
+      <img [src]="null | productImage" alt="Product Image"
+      class="w-full object-cover h-full rounded-lg"/>
+    </div>
     }
 
   </div>

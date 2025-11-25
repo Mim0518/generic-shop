@@ -80,6 +80,7 @@ export class ProductsService {
   }
 
   updateProductCache(product: Product) {
+    console.log('Actualizando el cache del producto', product.id)
     this.productCache.set(product.id, product);
     this.productsCache.forEach((productResponse, key) => {
       productResponse.products = productResponse.products.map(

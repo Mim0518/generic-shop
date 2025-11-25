@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit} from '@angular/core';
+import {Component, inject, input, OnInit, signal} from '@angular/core';
 import {Product} from '@products/interfaces/product.interface';
 import {ProductCarousel} from '@products/components/product-carousel/product-carousel';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -6,6 +6,7 @@ import {FormUtils} from '@utils/form-utils';
 import {FormErrorLabel} from '@shared/components/form-error-label/form-error-label';
 import {ProductsService} from '@products/services/products.service';
 import {Router} from '@angular/router';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'product-details',
@@ -21,7 +22,7 @@ export class ProductDetails implements OnInit{
   fb = inject(FormBuilder);
   productService = inject(ProductsService);
   router = inject(Router);
-
+  wasSaved = signal(false);
   productForm = this.fb.group({
     title: ['', Validators.required],
     description: ['', Validators.required],
@@ -31,7 +32,7 @@ export class ProductDetails implements OnInit{
     sizes: [['']],
     images: [[]],
     tags:[''],
-    gender: ['men', [Validators.required, Validators.pattern(/men|women|kids|unisex/)]],
+    gender: ['men', [Validators.required, Validators.pattern(/men|women|kid|unisex/)]],
   })
   sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
   ngOnInit(): void {
@@ -41,10 +42,17 @@ export class ProductDetails implements OnInit{
     this.productForm.patchValue(formLike as any);
     this.productForm.patchValue({tags: formLike.tags?.join(',')});
   }
-  onSubmit(){
+
+  async onSubmit(){
+    console.log('Submitting form');
     const isValid = this.productForm.valid;
-    this.productForm.markAllAsTouched();
-    if(!isValid) return;
+    // this.productForm.markAllAsTouched();
+    console.log('Form is valid: ', isValid);
+    if(!isValid){
+      console.log('Form is invalid');
+      console.log(this.productForm);
+      return;
+    }
     const formValue = this.productForm.value;
     const productLike: Partial<Product> = {
       ...(formValue as any),
@@ -52,20 +60,19 @@ export class ProductDetails implements OnInit{
     };
 
     if(this.product().id === 'new'){
-      this.productService.createProduct(productLike).subscribe(
-        product => {
-          console.log("producto creado");
-          this.router.navigate(['/admin/products', product.id]);
-        }
-        );
+      console.log('Creating new product');
+      const product = await firstValueFrom(this.productService.createProduct(productLike));
+      this.router.navigate(['/admin/products', product.id]);
     } else{
-      this.productService.updateProduct(this.product().id, productLike).subscribe(
-        product => console.log("Product updated: ", product),
-      );
+      console.log('Updating product with id: ', this.product().id);
+      await firstValueFrom(this.productService.updateProduct(this.product().id, productLike));
     }
+
+    this.wasSaved.set(true);
+    setTimeout(() => this.wasSaved.set(false), 2000);
   }
   onSizeChange(size:string){
-    const currentSizes = this.productForm.value.sizes ?? [];
+    const currentSizes = [... (this.productForm.value.sizes ?? [])];
     if(currentSizes.includes(size)){
       currentSizes.splice(currentSizes.indexOf(size), 1);
     }
