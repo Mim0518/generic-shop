@@ -6,13 +6,15 @@ import {rxResource} from '@angular/core/rxjs-interop';
 import {ProductsResponse} from '@products/interfaces/product.interface';
 import {Pagination} from '@shared/components/pagination/pagination';
 import {ItemsPerPageSelector} from '@shared/components/items-per-page-selector/items-per-page-selector';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-products-admin-page',
   imports: [
     ProductTable,
     Pagination,
-    ItemsPerPageSelector
+    ItemsPerPageSelector,
+    RouterLink
   ],
   templateUrl: './products-admin-page.html',
 })

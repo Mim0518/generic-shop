@@ -4,6 +4,8 @@ import {ProductCarousel} from '@products/components/product-carousel/product-car
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {FormUtils} from '@utils/form-utils';
 import {FormErrorLabel} from '@shared/components/form-error-label/form-error-label';
+import {ProductsService} from '@products/services/products.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'product-details',
@@ -16,7 +18,10 @@ import {FormErrorLabel} from '@shared/components/form-error-label/form-error-lab
 })
 export class ProductDetails implements OnInit{
   product = input.required<Product>();
-  fb = inject(FormBuilder)
+  fb = inject(FormBuilder);
+  productService = inject(ProductsService);
+  router = inject(Router);
+
   productForm = this.fb.group({
     title: ['', Validators.required],
     description: ['', Validators.required],
@@ -45,7 +50,19 @@ export class ProductDetails implements OnInit{
       ...(formValue as any),
       tags: formValue.tags?.toLowerCase().split(',').map(tag => tag.trim()) ?? []
     };
-    console.log({productLike});
+
+    if(this.product().id === 'new'){
+      this.productService.createProduct(productLike).subscribe(
+        product => {
+          console.log("producto creado");
+          this.router.navigate(['/admin/products', product.id]);
+        }
+        );
+    } else{
+      this.productService.updateProduct(this.product().id, productLike).subscribe(
+        product => console.log("Product updated: ", product),
+      );
+    }
   }
   onSizeChange(size:string){
     const currentSizes = this.productForm.value.sizes ?? [];

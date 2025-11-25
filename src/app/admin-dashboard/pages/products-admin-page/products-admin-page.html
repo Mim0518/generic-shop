@@ -7,6 +7,8 @@
 <div class="flex gap-2 items-center h-20">
   <shared-pagination [pages]="productsResource.value()?.pages ?? 0" [currentPage]="paginationService.currentPage()"/>
   <items-per-page-selector (itemsPerPage)="handleItemsPerPageEmission($event)"/>
+  <div class="flex flex-1"></div>
+  <button class="btn btn-primary" routerLink="/admin/products/new">Nuevo Producto</button>
 </div>
 <product-table [products]="productsResource.value()?.products ?? []"/>
 
