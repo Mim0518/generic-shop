@@ -11,6 +11,7 @@
       "@pages/*": ["./src/app/pages/*"],
       "@dashboard/*": ["./src/app/admin-dashboard/*"],
       "@shared/*": ["./src/app/shared/*"],
+      "@utils/*": ["./src/app/utils/*"],
     },
     "strict": true,
     "noImplicitOverride": true,

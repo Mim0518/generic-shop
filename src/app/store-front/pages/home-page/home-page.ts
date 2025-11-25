@@ -15,7 +15,7 @@ import {PaginationService} from '@shared/components/pagination/pagination.servic
 })
 export class HomePage {
   private productsService = inject(ProductsService);
-  protected paginationService = inject(PaginationService)
+  protected paginationService = inject(PaginationService);
   productsResource = rxResource({
     params: () => ({page : this.paginationService.currentPage()}),
     stream: () => {
