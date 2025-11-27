@@ -31,7 +31,7 @@
         type="number"
         placeholder="Precio"
         class="input input-bordered w-full"
-        formControlName="price"[class.border-red-500]="productForm.get('price')?.errors ?? false"
+        formControlName="price" [class.border-red-500]="productForm.get('price')?.errors ?? false"
       />
       <input
         type="number"
@@ -100,8 +100,13 @@
         Guardar
       </button>
     </div>
-    <product-carousel [images]="product().images" />
-    <input type="file" class="file-input file-input-bordered w-full mt-4" />
+    <product-carousel [images]="imagesToCarousel()" />
+    <input type="file" multiple accept="image/*" class="file-input file-input-bordered w-full mt-4" (change)="onFilesChange($event)"/>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      @for (image of tempImages(); track image) {
+        <img [src]="image" alt="" class="w-full object-cover h-full rounded-xl">
+      }
+    </div>
   </div>
 </form>
 
